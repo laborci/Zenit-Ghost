@@ -1,0 +1,11 @@
+<?php
+namespace {{namespace}};
+include '{{name}}.ghost.php';
+
+use Zenit\Ghost\Decorator;
+
+class {{name}} extends {{name}}Ghost{
+
+}
+
+{{name}}::init(function (Decorator $decorator){});

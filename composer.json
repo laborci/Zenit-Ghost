@@ -1,0 +1,19 @@
+{
+    "name": "zenit/ghost",
+    "description": "Zenit Ghost",
+    "keywords": [],
+    "license" : "MIT",
+    "authors" : [
+        {
+            "name": "Gergely Laborci",
+            "email": "gergely@laborci.hu"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Zenit\\Bundle\\Ghost\\": "src/"
+        }
+    }
+}
