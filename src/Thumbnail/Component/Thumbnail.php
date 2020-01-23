@@ -1,5 +1,6 @@
 <?php namespace Zenit\Bundle\Ghost\Thumbnail\Component;
 
+use Zenit\Bundle\Ghost\Thumbnail\Config;
 use Zenit\Bundle\Ghost\Thumbnail\Exception\SourceFileNotFound;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -26,10 +27,12 @@ class Thumbnail{
 
 	public function __construct(File $file){
 		$this->file = $file;
-		$this->sourcePath = env('thumbnail.source-path');
-		$this->urlBase = env('thumbnail.url');
-		$this->path = env('thumbnail.path');
-		$this->secret = env('thumbnail.secret');
+
+		$config = Config::Service();
+		$this->sourcePath = $config->sourcePath;
+		$this->urlBase = $config->url;
+		$this->path = $config->path;
+		$this->secret = $config->secret;
 
 		if (strpos($file->getPath(), $this->sourcePath) !== 0) throw new SourceFileNotFound();
 		$this->pathId = str_replace('/', '-', substr(trim($file->getPath(), '/'), strlen($this->sourcePath)));

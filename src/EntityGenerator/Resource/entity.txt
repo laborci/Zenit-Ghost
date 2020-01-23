@@ -2,7 +2,7 @@
 namespace {{namespace}};
 include '{{name}}.ghost.php';
 
-use Zenit\Ghost\Decorator;
+use Zenit\Bundle\Ghost\Entity\Component\Decorator;
 
 class {{name}} extends {{name}}Ghost{
 

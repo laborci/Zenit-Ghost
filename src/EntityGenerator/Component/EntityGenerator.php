@@ -1,10 +1,12 @@
 <?php namespace Zenit\Bundle\Ghost\EntityGenerator\Component;
 
 use CaseHelper\CaseHelperFactory;
+use Zenit\Bundle\DBAccess\Component\ConnectionFactory;
 use Zenit\Bundle\DBAccess\Component\PDOConnection\AbstractPDOConnection;
 use Zenit\Bundle\Ghost\Entity\Component\Field;
 use Zenit\Bundle\Ghost\Entity\Component\Model;
 use Zenit\Bundle\Ghost\Entity\Component\Relation;
+use Zenit\Bundle\Ghost\EntityGenerator\Config;
 use Zenit\Core\ServiceManager\Component\Service;
 use Zenit\Core\ServiceManager\Component\ServiceContainer;
 use Symfony\Component\Console\Application;
@@ -30,9 +32,11 @@ class EntityGenerator{
 	protected $ghosts;
 
 	public function __construct(){
-		$this->ghostPath = env('ghost.ghost-path');
-		$this->ghostNamespace = env('ghost.ghost-namespace');
-		$this->ghosts = env('ghost.ghosts');
+		$config = Config::Service();
+		$this->ghostPath = $config->path;
+		$this->ghostNamespace = $config->namespace;
+		$this->ghosts = $config->ghosts;
+		$this->defaultDatabase = $config->defaultDatabase;
 	}
 
 	public function execute(InputInterface $input, OutputInterface $output, Application $application){
@@ -45,7 +49,7 @@ class EntityGenerator{
 		$this->style->title('GHOST CREATOR');
 
 		foreach ($this->ghosts as $name => $properties){
-			$database = is_array($properties) && array_key_exists('database', $properties) ? $properties['database'] : env('ghost.default-database');
+			$database = is_array($properties) && array_key_exists('database', $properties) ? $properties['database'] : $this->defaultDatabase;
 			$table = is_array($properties) && array_key_exists('table', $properties) ? $properties['table'] : CaseHelperFactory::make(CaseHelperFactory::INPUT_TYPE_CAMEL_CASE)->toSnakeCase($name);
 
 			$this->style->section($name);
@@ -170,7 +174,7 @@ class EntityGenerator{
 		$this->style->write("Connecting to database ");
 		$this->style->write("- ${database}");
 		/** @var AbstractPDOConnection $connection */
-		$connection = ServiceContainer::get($database);
+		$connection = ConnectionFactory::get($database);
 		$smartAccess = $connection->createSmartAccess();
 		$this->style->writeln(" - [OK]");
 
@@ -194,7 +198,7 @@ class EntityGenerator{
 		}
 		$addFields[] = "\t\t" . '$model->protectField("id");';
 
-		$template = file_get_contents(__DIR__ . '/ghost.txt');
+		$template = file_get_contents(__DIR__ . '/../Resource/ghost.txt');
 
 		$template = str_replace('{{name}}', $name, $template);
 		$template = str_replace('{{table}}', $table, $template);
@@ -218,7 +222,7 @@ class EntityGenerator{
 		if (file_exists($file)){
 			$this->style->writeln(" - [ALREADY EXISTS]");
 		}else{
-			$template = file_get_contents(__DIR__ . '/entity.txt');
+			$template = file_get_contents(__DIR__ . '/../Resource/entity.txt');
 			$template = str_replace('{{namespace}}', $this->ghostNamespace, $template);
 			$template = str_replace('{{name}}', $name, $template);
 			$template = str_replace('{{table}}', $table, $template);

@@ -2,6 +2,7 @@
 
 namespace Zenit\Bundle\Ghost\Entity\Component;
 
+use Zenit\Bundle\DBAccess\Component\ConnectionFactory;
 use Zenit\Bundle\Ghost\Attachment\Component\AttachmentCategory;
 use Zenit\Bundle\Ghost\Attachment\Component\AttachmentStorage;
 use Zenit\Bundle\DBAccess\Component\PDOConnection\AbstractPDOConnection;
@@ -35,7 +36,7 @@ class Model{
 	public function __construct($ghost){
 		$table = $ghost::Table;
 		$connectionName = $ghost::ConnectionName;
-		$this->connection = ServiceContainer::get($connectionName);
+		$this->connection = ConnectionFactory::get($connectionName);
 		$this->table = $table;
 		$this->ghost = $ghost;
 		$this->repository = new Repository($ghost, $this);

@@ -1,5 +1,6 @@
 <?php namespace Zenit\Bundle\Ghost\Attachment\Component;
 
+use Zenit\Bundle\Ghost\Attachment\Config;
 use Zenit\Bundle\Ghost\Attachment\Exception\CategoryNotFound;
 use SQLite3;
 
@@ -19,11 +20,13 @@ class AttachmentStorage{
 	private $baseUrl;
 
 	public function __construct($storage){
-		$this->basePath = env('attachment.path');
-		$this->baseUrl = env('attachment.url');
+		$config = Config::Service();
+
+		$this->basePath = $config->attachmentPath;
+		$this->baseUrl = $config->attachmentUrl;
 		$this->path = $this->basePath . '/' . $storage;
 		$this->url = $this->baseUrl . '/' . $storage;
-		$this->metaFile = env('attachment.meta-db-path') . '/' . $storage . '.sqlite';
+		$this->metaFile = $config->attachmentMetaDBPath . '/' . $storage . '.sqlite';
 		$this->storage = $storage;
 	}
 

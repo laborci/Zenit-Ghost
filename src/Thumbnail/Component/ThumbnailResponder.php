@@ -1,5 +1,6 @@
 <?php namespace Zenit\Bundle\Ghost\Thumbnail\Component;
 
+use Zenit\Bundle\Ghost\Thumbnail\Config;
 use Zenit\Bundle\Mission\Module\Web\Responder\PageResponder;
 
 class ThumbnailResponder extends PageResponder {
@@ -12,6 +13,9 @@ class ThumbnailResponder extends PageResponder {
 	protected $ext;
 
 	protected function prepare(): bool {
+
+		$config = Config::Service();
+
 		$uri = explode('/', $this->getRequest()->getRequestUri());
 		$uri = urldecode(array_pop($uri));
 		$parts = explode('.', $uri);
@@ -25,13 +29,13 @@ class ThumbnailResponder extends PageResponder {
 		}
 		$op = array_pop($parts);
 		$file = join('.', $parts);
-		$path = env('thumbnail.source-path') . '/' . preg_replace("/-/", '/', $pathId) . '/' . $file;
+		$path = $config->sourcePath . '/' . preg_replace("/-/", '/', $pathId) . '/' . $file;
 
 		$url = $file . '.' . $op . (($jpegquality) ? ('.' . $jpegquality) : ('')) . '.' . $pathId . '.' . $ext;
-		$newHash = base_convert(crc32($url . env('thumbnail.secret')), 10, 32);
+		$newHash = base_convert(crc32($url . $config->secret), 10, 32);
 
-		if (!is_dir(env('thumbnail.path'))) mkdir(env('thumbnail.path'));
-		$this->target = env('thumbnail.path') . '/' . $uri;
+		if (!is_dir($config->path)) mkdir($config->path);
+		$this->target = $config->path . '/' . $uri;
 		$this->source = $path;
 		$this->ext = $ext;
 

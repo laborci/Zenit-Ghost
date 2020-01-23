@@ -6,8 +6,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Zenit\Bundle\Ghost\EntityGenerator\Component\EntityGenerator;
+use Zenit\Bundle\Mission\Component\Cli\CliModule;
 
-class Ghost extends Command {
+class Ghost extends CliModule {
 
 	/** @var SymfonyStyle */
 	protected $output;

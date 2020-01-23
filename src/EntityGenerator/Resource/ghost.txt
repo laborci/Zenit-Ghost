@@ -1,10 +1,10 @@
 <?php namespace {{namespace}};
 
-use Zenit\Attachment\AttachmentCategoryManager;
-use Zenit\DBAccess\Filter\Filter;
-use Zenit\Ghost\Field;
-use Zenit\Ghost\Ghost;
-use Zenit\Ghost\Model;
+use Zenit\Bundle\Ghost\Attachment\Component\AttachmentCategoryManager;
+use Zenit\Bundle\DBAccess\Component\Filter\Filter;
+use Zenit\Bundle\Ghost\Entity\Component\Field;
+use Zenit\Bundle\Ghost\Entity\Component\Ghost;
+use Zenit\Bundle\Ghost\Entity\Component\Model;
 
 /**
  * @method static Ghost{{name}}Finder search(Filter $filter = null)
@@ -40,4 +40,4 @@ abstract class {{name}}Ghost extends Ghost{
  * @method \{{namespace}}\{{name}}[] collectPage($pageSize, $page, &$count = 0)
  * @method \{{namespace}}\{{name}} pick()
  */
-abstract class Ghost{{name}}Finder extends \Zenit\DBAccess\Finder\AbstractFinder {}
+abstract class Ghost{{name}}Finder extends \Zenit\Bundle\DBAccess\Component\Finder\AbstractFinder {}
