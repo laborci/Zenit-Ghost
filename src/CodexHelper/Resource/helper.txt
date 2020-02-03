@@ -1,0 +1,19 @@
+<?php namespace {{namespace}};
+
+/**
+{{annotations}}
+ */
+abstract class {{name}}GhostCodexHelper extends \Zenit\Bundle\Codex\Component\Codex\AdminDescriptor{
+
+
+{{fields}}
+
+	public function __construct(){
+{{fieldConstructors}}
+	}
+
+	protected function createDataProvider(): \Zenit\Bundle\Codex\Interfaces\DataProviderInterface{
+		return new \Zenit\Bundle\Codex\Component\Codex\DataProvider\GhostDataProvider(\{{ghostNamespace}}\{{name}}::class);
+	}
+
+}

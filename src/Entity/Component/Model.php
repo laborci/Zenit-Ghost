@@ -86,8 +86,8 @@ class Model{
 		return $this->relations[$target] = new Relation($target, Relation::TYPE_BELONGSTO, ['ghost' => $ghost, 'field' => $field]);
 	}
 
-	public function addField($name, $type): Field{
-		return $this->fields[$name] = new Field($name, $type);
+	public function addField($name, $type, $data = null): Field{
+		return $this->fields[$name] = new Field($name, $type, $data);
 	}
 
 	public function hasAttachment($name): AttachmentCategory{

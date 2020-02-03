@@ -187,14 +187,16 @@ class EntityGenerator{
 		$addFields = [];
 		$fieldConstants = [];
 		foreach ($fields as $field){
-			$addFields[] = "\t\t" . '$model->addField("' . $field['Field'] . '", ' . $this->fieldType($field, $field['Field']) . ');';
-			$fieldConstants[] = "\t" . 'const F_' . $field['Field'] . ' = "' . $field['Field'] . '";';
+			$options = null;
 			if (strpos($field['Type'], 'set') === 0 || strpos($field['Type'], 'enum') === 0){
-				$values = $smartAccess->getEnumValues($table, $field['Field']);
-				foreach ($values as $value){
+				$options = $smartAccess->getEnumValues($table, $field['Field']);
+				foreach ($options as $value){
 					$constants[] = "\t" . 'const V_' . $field['Field'] . '_' . $value . ' = "' . $value . '";';
 				}
 			}
+			$addFields[] = "\t\t" . '$model->addField("' . $field['Field'] . '", ' . $this->fieldType($field, $field['Field']) . ','.var_export($options, true). ');';
+			$fieldConstants[] = "\t" . 'const F_' . $field['Field'] . ' = "' . $field['Field'] . '";';
+
 		}
 		$addFields[] = "\t\t" . '$model->protectField("id");';
 

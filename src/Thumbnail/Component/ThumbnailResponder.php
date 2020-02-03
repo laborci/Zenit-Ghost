@@ -1,7 +1,7 @@
 <?php namespace Zenit\Bundle\Ghost\Thumbnail\Component;
 
 use Zenit\Bundle\Ghost\Thumbnail\Config;
-use Zenit\Bundle\Mission\Module\Web\Responder\PageResponder;
+use Zenit\Bundle\Mission\Component\Web\Responder\PageResponder;
 
 class ThumbnailResponder extends PageResponder {
 

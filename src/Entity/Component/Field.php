@@ -20,12 +20,12 @@ class Field{
 	public $protected = false;
 	public $getter = null;
 	public $setter = null;
-	private $data;
+	public $options;
 
-	public function __construct($name, $type, $data = null){
+	public function __construct($name, $type, $options = null){
 		$this->name = $name;
 		$this->type = $type;
-		$this->data = $data;
+		$this->options = $options;
 	}
 
 	public function __toString(){
