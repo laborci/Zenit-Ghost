@@ -5,6 +5,7 @@ use Zenit\Bundle\DBAccess\Component\Filter\Filter;
 use Zenit\Bundle\Ghost\Entity\Component\Field;
 use Zenit\Bundle\Ghost\Entity\Component\Ghost;
 use Zenit\Bundle\Ghost\Entity\Component\Model;
+use Zenit\Bundle\DBAccess\Component\Filter\Comparison;
 
 /**
  * @method static Ghost{{name}}Finder search(Filter $filter = null)
@@ -16,6 +17,8 @@ abstract class {{name}}Ghost extends Ghost{
 	public static $model;
 	const Table = "{{table}}";
 	const ConnectionName = "{{connectionName}}";
+
+{{comparers}}
 
 {{constants}}
 

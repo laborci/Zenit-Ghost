@@ -1,6 +1,10 @@
 <?php namespace Zenit\Bundle\Ghost\EntityGenerator\Component;
 
 use CaseHelper\CaseHelperFactory;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Zenit\Bundle\DBAccess\Component\ConnectionFactory;
 use Zenit\Bundle\DBAccess\Component\PDOConnection\AbstractPDOConnection;
 use Zenit\Bundle\Ghost\Entity\Component\Field;
@@ -8,11 +12,6 @@ use Zenit\Bundle\Ghost\Entity\Component\Model;
 use Zenit\Bundle\Ghost\Entity\Component\Relation;
 use Zenit\Bundle\Ghost\EntityGenerator\Config;
 use Zenit\Core\ServiceManager\Component\Service;
-use Zenit\Core\ServiceManager\Component\ServiceContainer;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 class EntityGenerator{
 
@@ -126,16 +125,21 @@ class EntityGenerator{
 		}
 
 		foreach ($model->virtuals as $field){
+
+			if(strpos($field['type'], '\\') !== false){
+				$field['type'] = '\\'.trim($field['type'],'\\');
+			}
+
 			if ($field['setter'] !== false && $field['getter'] !== false)
-				$annotations[] = " * @property $" . $field['name'];
+				$annotations[] = " * @property ".$field['type']." $" . $field['name'];
 			elseif ($field['getter'] !== false)
-				$annotations[] = " * @property-read $" . $field['name'];
+				$annotations[] = " * @property-read ".$field['type']." $" . $field['name'];
 			elseif ($field['setter'] !== false)
-				$annotations[] = " * @property-write $" . $field['name'];
+				$annotations[] = " * @property-write ".$field['type']." $" . $field['name'];
 			if (is_string($field['getter']))
-				$getterSetter[] = "\t" . 'abstract protected function ' . $field['getter'] . '();';
+				$getterSetter[] = "\t" . 'abstract protected function ' . $field['getter'] . '()'.($field['type']?':'.$field['type']:'').';';
 			if (is_string($field['setter']))
-				$getterSetter[] = "\t" . 'abstract protected function ' . $field['setter'] . '($value);';
+				$getterSetter[] = "\t" . 'abstract protected function ' . $field['setter'] . '('.$field['type'].'$value);';
 		}
 
 		foreach ($model->getAttachmentStorage()->getCategories() as $category){
@@ -185,6 +189,7 @@ class EntityGenerator{
 
 		$constants = [];
 		$addFields = [];
+		$comparers = [];
 		$fieldConstants = [];
 		foreach ($fields as $field){
 			$options = null;
@@ -194,6 +199,7 @@ class EntityGenerator{
 					$constants[] = "\t" . 'const V_' . $field['Field'] . '_' . $value . ' = "' . $value . '";';
 				}
 			}
+			$comparers[]= "\t\t"."public static function f_". $field['Field']."(){return new Comparison('". $field['Field']."');}";
 			$addFields[] = "\t\t" . '$model->addField("' . $field['Field'] . '", ' . $this->fieldType($field, $field['Field']) . ','.var_export($options, true). ');';
 			$fieldConstants[] = "\t" . 'const F_' . $field['Field'] . ' = "' . $field['Field'] . '";';
 
@@ -209,6 +215,7 @@ class EntityGenerator{
 		$template = str_replace('{{add-fields}}', join("\n", $addFields), $template);
 		$template = str_replace('{{constants}}', join("\n", $constants), $template);
 		$template = str_replace('{{fieldConstants}}', join("\n", $fieldConstants), $template);
+		$template = str_replace('{{comparers}}', join("\n", $comparers), $template);
 
 		$this->style->write("Generate Ghost ");
 		$this->style->write("- {$file}");

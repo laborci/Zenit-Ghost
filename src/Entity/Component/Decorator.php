@@ -27,5 +27,5 @@ class Decorator{
 	 * @param bool|string $getter false: no getter; true: get'Field'() method; string: your method name
 	 * @param bool|string      $setter false: no setter; true: set'Field'() method; string: your method name
 	 */
-	public function virtual($field, $getter = true, $setter = false){ $this->model->virtual($field, $getter, $setter); }
+	public function virtual($field, $getter = true, $setter = false, $type=''){ $this->model->virtual($field, $getter, $setter, $type); }
 }

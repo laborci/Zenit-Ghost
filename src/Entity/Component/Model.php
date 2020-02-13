@@ -61,12 +61,12 @@ class Model{
 	 * @param bool|string $getter false: no getter; true: get'Field'() method; string: your method name
 	 * @param bool|string $setter false: no setter; true: set'Field'() method; string: your method name
 	 */
-	public function virtual($field, $getter = true, $setter = false){
+	public function virtual($field, $getter = true, $setter = false, $type = ''){
 		if ($getter === true) $getter = 'get' . ucfirst($field);
 		if ($setter === true || $setter === null) $setter = 'set' . ucfirst($field);
 		if ($getter !== false) $this->getters[$field] = ['type' => 'virtual', 'method' => $getter];
 		if ($setter !== false) $this->setters[$field] = ['method' => $getter];
-		$this->virtuals[$field] = ['setter' => $setter, 'getter' => $getter, 'name' => $field];
+		$this->virtuals[$field] = ['setter' => $setter, 'getter' => $getter, 'name' => $field, 'type'=>$type];
 	}
 
 	public function immutable(){ $this->mutable = false; }

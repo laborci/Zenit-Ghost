@@ -1,6 +1,7 @@
 <?php namespace Zenit\Bundle\Ghost\Entity\Component;
 
 use JsonSerializable;
+use Zenit\Bundle\DBAccess\Component\Filter\Comparison;
 use Zenit\Bundle\Ghost\Attachment\Interfaces\AttachmentOwnerInterface;
 use Zenit\Bundle\Ghost\Entity\Exception\InsufficientData;
 
@@ -19,6 +20,7 @@ abstract class Ghost implements JsonSerializable, AttachmentOwnerInterface{
 	public function isExists(): bool{ return (bool)$this->id; }
 	public function isDeleted(): bool{ return $this->deleted; }
 	function __toString(){ return get_called_class() . ' ' . $this->id; }
+
 
 #region Model Creation
 
