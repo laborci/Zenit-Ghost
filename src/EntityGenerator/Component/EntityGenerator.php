@@ -255,6 +255,7 @@ class EntityGenerator{
 		if (strpos($dbtype, 'smallint') === 0) return 'Field::TYPE_INT';
 		if (strpos($dbtype, 'mediumint') === 0) return 'Field::TYPE_INT';
 		if (strpos($dbtype, 'bigint') === 0) return 'Field::TYPE_INT';
+		if (strpos($dbtype, 'json') === 0) return 'Field::TYPE_JSON';
 
 		if (strpos($dbtype, 'varchar') === 0) return 'Field::TYPE_STRING';
 		if (strpos($dbtype, 'char') === 0) return 'Field::TYPE_STRING';
